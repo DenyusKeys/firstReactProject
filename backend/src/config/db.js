@@ -13,5 +13,3 @@ export const connectDB = async () => {
     }
 }
 
-
-//LEFT OFF HERE FOR VIDEO 54:22 going over hiding connection string
