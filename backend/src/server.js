@@ -9,8 +9,6 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT;
 
-connectDB();
-
 //middleware
 app.use(express.json()); //parse JSON bodies: req.body
 
@@ -26,9 +24,13 @@ app.use((req,res,next) => {
 app.use("/api/notes", notesRoutes);
 
 
-app.listen(PORT, () => {
+//Better for production to connect to database before launching the application
+connectDB().then(() => {
+    app.listen(PORT, () => {
     console.log(`Server started on PORT:${PORT}`);
+    });
 })
+
 
 
 
