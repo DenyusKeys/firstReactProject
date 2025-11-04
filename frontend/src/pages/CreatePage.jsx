@@ -1,9 +1,8 @@
-import React from 'react'
 import { useState } from "react";
 import { ArrowLeft } from 'lucide-react';
 import { Link, useNavigate } from 'react-router';
 import toast from 'react-hot-toast';
-import axios from 'axios';
+import api from '../lib/axios';
 
 
 
@@ -24,7 +23,7 @@ const CreatePage = () => {
 
     setLoading(true)
     try {
-      await axios.post("http://localhost:2222/api/notes", {
+      await api.post("/notes", {
         title,
         content
       })
@@ -32,7 +31,14 @@ const CreatePage = () => {
       navigate('/')
     } catch (error) {
       console.log("Error createing note", error)
-      toast.error("Failed to create note.")
+      if(error.response.status == 429){
+        toast.error("Slow down.  You are creating notes too quickly", {
+          duration:4000,
+          icon: "☠️"
+        })
+      } else  {
+        toast.error("Failed to create note")
+      }
     } finally{
 
     }
@@ -79,8 +85,8 @@ const CreatePage = () => {
 
 
                 <div className='card-actions justify-end'>
-                  <button type='submit' className='btn btn-primary' disabled={loading}>
-                    {loading ? "Creating..." : "Create Note"}
+                  <button type='submit' className='btn btn-primary'>
+                    Create Note
                   </button>
                 </div>
               </form>
